@@ -143,8 +143,8 @@ router.route('/Token/Get/:id').get(async(req, res) => {
         client = await getAuraWasmClient();
     }
     const nftInfo = {
-        nft_info: {
-            token_id: String(req.params.id)
+        get_pen: {
+            id: String(req.params.id)
         }
     }
     console.log(client)
