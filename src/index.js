@@ -8,8 +8,7 @@
  * $ npm run start-gendoc
  */
 
-
-require('dotenv').config();
+import 'dotenv/config';
 
 import swaggerUi from 'swagger-ui-express';
 import { readFile } from 'fs/promises';

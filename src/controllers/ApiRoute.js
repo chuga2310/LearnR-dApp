@@ -3,7 +3,7 @@ const router = express.Router();
 import { SigningCosmWasmClient, CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import { Web3Storage, File } from 'web3.storage';
-import { makeGatewayURL } from '../helpers/helpers.js'
+import { makeGatewayURL } from '../helpers/helpers.js';
 console.log(process.env.MNEMONIC)
 const mnemonic = process.env.MNEMONIC;
 const rpcEndpoint = process.env.RPC;
