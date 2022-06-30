@@ -6,7 +6,7 @@ import { Web3Storage, File } from 'web3.storage';
 import { makeGatewayURL } from '../helpers/helpers.js'
 import dotenv from 'dotenv';
 dotenv.config();
-
+console.log(process.env.MNEMONIC)
 const mnemonic = process.env.MNEMONIC;
 const rpcEndpoint = process.env.RPC;
 const contractAddress = process.env.CONTRACT;

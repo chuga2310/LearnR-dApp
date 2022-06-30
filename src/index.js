@@ -8,8 +8,11 @@
  * $ npm run start-gendoc
  */
 
+
+
 import swaggerUi from 'swagger-ui-express';
 import { readFile } from 'fs/promises';
+import User from './models/Pen.js';
 const swaggerFile = JSON.parse(
   await readFile(
     new URL('../swagger-output.json', import.meta.url)
