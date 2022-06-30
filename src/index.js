@@ -38,4 +38,4 @@ app.listen(3000, () => {
 })
 
 // /**Creat record */
-// await pen.create({name: 'common pen'});
+// await pen.create({name: 'common pen 123'});
