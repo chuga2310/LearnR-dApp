@@ -37,5 +37,5 @@ app.listen(3000, () => {
   console.log("Server is running!\nAPI documentation: http://localhost:3000/docs");
 })
 
-/**Creat record */
-await pen.create({name: 'common pen'});
+// /**Creat record */
+// await pen.create({name: 'common pen'});
