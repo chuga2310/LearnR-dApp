@@ -9,6 +9,7 @@
  */
 
 
+require('dotenv').config();
 
 import swaggerUi from 'swagger-ui-express';
 import { readFile } from 'fs/promises';

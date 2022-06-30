@@ -4,8 +4,6 @@ import { SigningCosmWasmClient, CosmWasmClient } from '@cosmjs/cosmwasm-stargate
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import { Web3Storage, File } from 'web3.storage';
 import { makeGatewayURL } from '../helpers/helpers.js'
-import dotenv from 'dotenv';
-dotenv.config();
 console.log(process.env.MNEMONIC)
 const mnemonic = process.env.MNEMONIC;
 const rpcEndpoint = process.env.RPC;
