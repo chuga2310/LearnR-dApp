@@ -103,34 +103,55 @@ router.route('/Token/Mint').post(async (req, res) => {
         signingClient = await getSigningAuraWasmClient(wallet);
     }
 
-    const mintMsg = {
-        mint: {
-            token_id: req.body.token_id,
-            owner: req.body.owner,
-            token_uri: req.body.token_uri,
-            extension: req.body.extension
+
+    let penInfo = await pen.create({
+        contract: contractAddress,
+        owner: firstAccount.address,
+        name: req.name,
+        quality: req.quality,
+        level: req.level,
+        effect: req.effect,
+        resilience: req.resilience,
+        number_of_mints: req.number_of_mints,
+        durability: req.durability
+    }, function (err, result) {
+        if(err) {
+            res.status(500).json({
+                data: [err.message],
+                message: 'Error'
+            });
         }
-    };
+    });
 
-    const fee = {
-        amount: [{
-            denom: 'uaura',
-            amount: '16',
-        },],
-        gas: '152375',
-    }
+    if (penInfo) {
+        const mintMsg = {
+            mint: {
+                token_id: req.penInfo._id,
+                id: req.penInfo.id,
+                owner: req.penInfo.owner,
+            }
+        };
 
-    try {
-        const result = await signingClient.execute(firstAccount.address, contractAddress, mintMsg, fee);
-        res.status(200).json({
-            data: [result],
-            message: 'Mint Result'
-        });
-    } catch (err) {
-        res.status(500).json({
-            data: [err.message],
-            message: 'Error'
-        });
+        const fee = {
+            amount: [{
+                denom: 'uaura',
+                amount: '16',
+            },],
+            gas: ' ',
+        }
+
+        try {
+            const result = await signingClient.execute(firstAccount.address, contractAddress, mintMsg, fee);
+            res.status(200).json({
+                data: [result],
+                message: 'Mint Result'
+            });
+        } catch (err) {
+            res.status(500).json({
+                data: [err.message],
+                message: 'Error'
+            });
+        }
     }
 })
 
@@ -214,7 +235,7 @@ router.route('/metadata/:contract/token/:id').get(async (req, res) => {
     /* 	#swagger.tags = ['Token Mongodb']
     #swagger.description = 'Get Info NFT Token' */
     const conditions = {
-        _id: String(req.params.id),
+        id: String(req.params.id),
         contract: String(req.params.contract)
     }
 
