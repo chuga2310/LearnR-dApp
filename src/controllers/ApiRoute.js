@@ -4,7 +4,8 @@ import { SigningCosmWasmClient, CosmWasmClient } from '@cosmjs/cosmwasm-stargate
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import { Web3Storage, File } from 'web3.storage';
 import { makeGatewayURL } from '../helpers/helpers.js';
-console.log(process.env.MNEMONIC)
+import pen from '../models/Pen.js';
+
 const mnemonic = process.env.MNEMONIC;
 const rpcEndpoint = process.env.RPC;
 const contractAddress = process.env.CONTRACT;
@@ -16,22 +17,22 @@ let firstAccount;
 let client;
 let signingClient;
 
-const getWallet = async() => {
+const getWallet = async () => {
     const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, { prefix: 'aura' });
     return wallet;
 }
 
-const get1stAccount = async(wallet) => {
+const get1stAccount = async (wallet) => {
     const [firstAccount] = await wallet.getAccounts();
     return firstAccount;
 }
 
-const getAuraWasmClient = async() => {
+const getAuraWasmClient = async () => {
     const client = await CosmWasmClient.connect(rpcEndpoint);
     return client;
 }
 
-const getSigningAuraWasmClient = async(wallet) => {
+const getSigningAuraWasmClient = async (wallet) => {
     const signingClient = await SigningCosmWasmClient.connectWithSigner(rpcEndpoint, wallet);
     return signingClient;
 }
@@ -47,7 +48,7 @@ function makeFileObjects(img) {
     return files
 }
 
-router.route('/Image/Upload').post(async(req, res) => {
+router.route('/Image/Upload').post(async (req, res) => {
     /* 	#swagger.tags = ['Image']
     #swagger.description = 'Upload image to IPFS' */
 
@@ -82,7 +83,7 @@ router.route('/Image/Upload').post(async(req, res) => {
     }
 })
 
-router.route('/Token/Mint').post(async(req, res) => {
+router.route('/Token/Mint').post(async (req, res) => {
     /* 	#swagger.tags = ['Token']
     #swagger.description = 'Mint NFT Token' */
 
@@ -115,7 +116,7 @@ router.route('/Token/Mint').post(async(req, res) => {
         amount: [{
             denom: 'uaura',
             amount: '16',
-        }, ],
+        },],
         gas: '152375',
     }
 
@@ -133,7 +134,7 @@ router.route('/Token/Mint').post(async(req, res) => {
     }
 })
 
-router.route('/Token/Get/:id').get(async(req, res) => {
+router.route('/Token/Get/:id').get(async (req, res) => {
     /* 	#swagger.tags = ['Token']
     #swagger.description = 'Mint NFT Token' */
 
@@ -161,7 +162,7 @@ router.route('/Token/Get/:id').get(async(req, res) => {
     }
 })
 
-router.post('/Token/Transfer', async(req, res, next) => {
+router.post('/Token/Transfer', async (req, res, next) => {
     /* 	#swagger.tags = ['Token']
         #swagger.description = 'Transfer NFT Token' */
 
@@ -191,7 +192,7 @@ router.post('/Token/Transfer', async(req, res, next) => {
         amount: [{
             denom: 'uaura',
             amount: '1000',
-        }, ],
+        },],
         gas: '152375',
     }
 
@@ -202,6 +203,30 @@ router.post('/Token/Transfer', async(req, res, next) => {
             message: 'Tranfer Result'
         });
     } catch (err) {
+        res.status(500).json({
+            data: [err.message],
+            message: 'Error'
+        });
+    }
+})
+
+router.route('/metadata/:contract/token/:id').get(async (req, res) => {
+    /* 	#swagger.tags = ['Token Mongodb']
+    #swagger.description = 'Get Info NFT Token' */
+    const conditions = {
+        _id: String(req.params.id),
+        contract: String(req.params.contract)
+    }
+
+    try {
+        const tokenInfo = await pen.findOne(conditions).exec();
+        res.status(200).json({
+            data: [tokenInfo],
+            message: 'Found Result'
+        });
+    }
+    catch (err) {
+        console.log(err)
         res.status(500).json({
             data: [err.message],
             message: 'Error'

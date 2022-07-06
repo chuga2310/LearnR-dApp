@@ -12,7 +12,6 @@ import 'dotenv/config';
 
 import swaggerUi from 'swagger-ui-express';
 import { readFile } from 'fs/promises';
-import pen from './models/Pen.js';
 
 const swaggerFile = JSON.parse(
   await readFile(
@@ -28,7 +27,6 @@ app.use(bodyParser.json());
 
 /* Routes */
 import router from './routes.js';
-
 /* Middlewares */
 app.use(router);
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
@@ -36,6 +34,3 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 app.listen(3000, () => {
   console.log("Server is running!\nAPI documentation: http://localhost:3000/docs");
 })
-
-// /**Creat record */
-// await pen.create({name: 'common pen 123'});
