@@ -103,7 +103,6 @@ router.route('/Token/Mint').post(async (req, res) => {
         signingClient = await getSigningAuraWasmClient(wallet);
     }
 
-
     let penInfo = await pen.create({
         contract: contractAddress,
         owner: firstAccount.address,
@@ -126,8 +125,7 @@ router.route('/Token/Mint').post(async (req, res) => {
     if (penInfo) {
         const mintMsg = {
             mint: {
-                token_id: req.penInfo._id,
-                id: req.penInfo.id,
+                id: req.penInfo.index,
                 owner: req.penInfo.owner,
             }
         };
@@ -137,7 +135,7 @@ router.route('/Token/Mint').post(async (req, res) => {
                 denom: 'uaura',
                 amount: '16',
             },],
-            gas: ' ',
+            gas: '123',
         }
 
         try {

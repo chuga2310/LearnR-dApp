@@ -14,7 +14,7 @@ const penSchema = new Schema({
     durability: { type :Number, required : true }
 });
 
-penSchema.plugin(AutoIncrement, {inc_field: "id" });
+penSchema.plugin(AutoIncrement, {inc_field: "index" });
 
 const pen = mongoose.model('pens', penSchema);
 
