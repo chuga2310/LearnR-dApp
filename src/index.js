@@ -8,8 +8,11 @@
  * $ npm run start-gendoc
  */
 
+import 'dotenv/config';
+
 import swaggerUi from 'swagger-ui-express';
 import { readFile } from 'fs/promises';
+
 const swaggerFile = JSON.parse(
   await readFile(
     new URL('../swagger-output.json', import.meta.url)
@@ -24,7 +27,6 @@ app.use(bodyParser.json());
 
 /* Routes */
 import router from './routes.js';
-
 /* Middlewares */
 app.use(router);
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
