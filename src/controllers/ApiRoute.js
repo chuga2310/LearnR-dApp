@@ -229,11 +229,11 @@ router.post('/Token/Transfer', async (req, res, next) => {
     }
 })
 
-router.route('/metadata/:contract/token/:id').get(async (req, res) => {
+router.route('/metadata/:contract/token/:index').get(async (req, res) => {
     /* 	#swagger.tags = ['Token Mongodb']
     #swagger.description = 'Get Info NFT Token' */
     const conditions = {
-        id: String(req.params.id),
+        index: String(req.params.id),
         contract: String(req.params.contract)
     }
 
