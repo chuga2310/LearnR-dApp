@@ -106,7 +106,6 @@ router.route('/Token/Mint').post(async (req, res) => {
     const result = await pen.create({
         contract: contractAddress,
         owner: firstAccount.address,
-        name: req.body.name,
         quality: req.body.quality,
         level: req.body.level,
         effect: req.body.effect,
@@ -133,7 +132,7 @@ router.route('/Token/Mint').post(async (req, res) => {
         try {
             const response = await signingClient.execute(firstAccount.address, contractAddress, mintMsg, fee);
             await pen.findOneAndUpdate({index : result.index}, {deploy_status: true}, { upsert: true });
-            
+
             res.status(200).json({
                 data: [response],
                 message: 'Mint Result'

@@ -5,7 +5,6 @@ var Schema = mongoose.Schema;
 const penSchema = new Schema({
     contract: String,
     owner: String,
-    name: { type :String, required : true },
     quality: { type :String, required : true },
     level: { type :Number, required : true },
     effect: { type :Number, required : true },
