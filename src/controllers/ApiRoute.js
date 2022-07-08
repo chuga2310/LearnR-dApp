@@ -3,10 +3,9 @@ const router = express.Router();
 import { SigningCosmWasmClient, CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import { Web3Storage, File } from 'web3.storage';
-import { makeGatewayURL } from '../helpers/helpers.js'
-// import dotenv from 'dotenv';
-// dotenv.config();
-console.log(process.env)
+import { makeGatewayURL } from '../helpers/helpers.js';
+import pen from '../models/Pen.js';
+
 const mnemonic = process.env.MNEMONIC;
 const rpcEndpoint = process.env.RPC;
 const contractAddress = process.env.CONTRACT;
@@ -104,35 +103,65 @@ router.route('/Token/Mint').post(async(req, res) => {
         signingClient = await getSigningAuraWasmClient(wallet);
     }
 
-    const mintMsg = {
-        mint: {
-            token_id: req.body.token_id,
-            owner: req.body.owner,
-            token_uri: req.body.token_uri,
-            extension: req.body.extension
+    let penInfo = await pen.create({
+        contract: contractAddress,
+        owner: firstAccount.address,
+        name: req.name,
+        quality: req.quality,
+        level: req.level,
+        effect: req.effect,
+        resilience: req.resilience,
+        number_of_mints: req.number_of_mints,
+        durability: req.durability
+    }, function(err, result) {
+        if (err) {
+            res.status(500).json({
+                data: [err.message],
+                message: 'Error'
+            });
         }
-    };
+    });
 
+    <<
+    << << < HEAD
     const fee = {
-        amount: [{
-            denom: 'uaura',
-            amount: '153',
-        }, ],
-        gas: '152375',
-    }
+            amount: [{
+                denom: 'uaura',
+                amount: '153',
+            }, ],
+            gas: '152375',
+        } ===
+        === =
+        if (penInfo) {
+            const mintMsg = {
+                mint: {
+                    id: req.penInfo.index,
+                    owner: req.penInfo.owner,
+                }
+            }; >>>
+            >>> > b90650c952a6dbb0476ddf41c43bb8df66e0b205
 
-    try {
-        const result = await signingClient.execute(firstAccount.address, contractAddress, mintMsg, fee);
-        res.status(200).json({
-            data: [result],
-            message: 'Mint Result'
-        });
-    } catch (err) {
-        res.status(500).json({
-            data: [err.message],
-            message: 'Error'
-        });
-    }
+            const fee = {
+                amount: [{
+                    denom: 'uaura',
+                    amount: '16',
+                }, ],
+                gas: '123',
+            }
+
+            try {
+                const result = await signingClient.execute(firstAccount.address, contractAddress, mintMsg, fee);
+                res.status(200).json({
+                    data: [result],
+                    message: 'Mint Result'
+                });
+            } catch (err) {
+                res.status(500).json({
+                    data: [err.message],
+                    message: 'Error'
+                });
+            }
+        }
 })
 
 router.route('/Token/Get/:id').get(async(req, res) => {
@@ -204,6 +233,29 @@ router.post('/Token/Transfer', async(req, res, next) => {
             message: 'Tranfer Result'
         });
     } catch (err) {
+        res.status(500).json({
+            data: [err.message],
+            message: 'Error'
+        });
+    }
+})
+
+router.route('/metadata/:contract/token/:index').get(async(req, res) => {
+    /* 	#swagger.tags = ['Token Mongodb']
+    #swagger.description = 'Get Info NFT Token' */
+    const conditions = {
+        index: String(req.params.id),
+        contract: String(req.params.contract)
+    }
+
+    try {
+        const tokenInfo = await pen.findOne(conditions).exec();
+        res.status(200).json({
+            data: [tokenInfo],
+            message: 'Found Result'
+        });
+    } catch (err) {
+        console.log(err)
         res.status(500).json({
             data: [err.message],
             message: 'Error'

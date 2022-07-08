@@ -8,8 +8,11 @@
  * $ npm run start-gendoc
  */
 
+import 'dotenv/config';
+
 import swaggerUi from 'swagger-ui-express';
 import { readFile } from 'fs/promises';
+
 const swaggerFile = JSON.parse(
     await readFile(
         new URL('../swagger-output.json',
@@ -25,7 +28,6 @@ app.use(bodyParser.json());
 
 /* Routes */
 import router from './routes.js';
-
 /* Middlewares */
 app.use(router);
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
@@ -33,5 +35,3 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 app.listen(3000, () => {
     console.log("Server is running!\nAPI documentation: http://localhost:3000/docs");
 })
-
-export default app
