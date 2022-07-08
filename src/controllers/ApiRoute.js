@@ -4,9 +4,9 @@ import { SigningCosmWasmClient, CosmWasmClient } from '@cosmjs/cosmwasm-stargate
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import { Web3Storage, File } from 'web3.storage';
 import { makeGatewayURL } from '../helpers/helpers.js'
-import dotenv from 'dotenv';
-dotenv.config();
-
+// import dotenv from 'dotenv';
+// dotenv.config();
+console.log(process.env)
 const mnemonic = process.env.MNEMONIC;
 const rpcEndpoint = process.env.RPC;
 const contractAddress = process.env.CONTRACT;
@@ -116,7 +116,7 @@ router.route('/Token/Mint').post(async(req, res) => {
     const fee = {
         amount: [{
             denom: 'uaura',
-            amount: '16',
+            amount: '153',
         }, ],
         gas: '152375',
     }

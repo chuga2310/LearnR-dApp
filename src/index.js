@@ -11,9 +11,10 @@
 import swaggerUi from 'swagger-ui-express';
 import { readFile } from 'fs/promises';
 const swaggerFile = JSON.parse(
-  await readFile(
-    new URL('../swagger-output.json', import.meta.url)
-  )
+    await readFile(
+        new URL('../swagger-output.json',
+            import.meta.url)
+    )
 );
 
 import express from 'express';
@@ -30,5 +31,7 @@ app.use(router);
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 app.listen(3000, () => {
-  console.log("Server is running!\nAPI documentation: http://localhost:3000/docs");
+    console.log("Server is running!\nAPI documentation: http://localhost:3000/docs");
 })
+
+export default app
