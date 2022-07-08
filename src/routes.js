@@ -8,7 +8,10 @@ import fileUpload from 'express-fileupload';
 router.use(fileUpload());
 
 import apiV1 from './controllers/ApiRoute.js';
+import apiConnectWallet from './controllers/ConnectWallet.js';
 
 router.use(apiV1);
+
+router.use(apiConnectWallet);
 
 export default router
