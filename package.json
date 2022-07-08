@@ -21,7 +21,7 @@
         "url": "git+https://github.com/aura-nw/dapp-example.git"
     },
     "scripts": {
-        "start": "node src/index.js",
+        "start": "node app.js",
         "start-gendoc": "node swagger.js"
     },
     "dependencies": {

@@ -11,7 +11,8 @@ const penSchema = new Schema({
     effect: { type :Number, required : true },
     resilience: { type :Number, required : true },
     number_of_mints: { type :Number, required : true },
-    durability: { type :Number, required : true }
+    durability: { type :Number, required : true },
+    deploy_status : { type: Boolean, default: false }
 });
 
 penSchema.plugin(AutoIncrement, {inc_field: "index" });
