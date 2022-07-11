@@ -7,6 +7,6 @@ const tokenAccessSchema = new Schema({
     is_active: Boolean,
 });
 
-const token_access = mongoose.model('token_access', tokenAccessSchema);
+const token_access = mongoose.model('token_accesses', tokenAccessSchema);
 
 export default token_access;
