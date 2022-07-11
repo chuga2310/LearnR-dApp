@@ -1,41 +1,12 @@
 import express from 'express';
 const router = express.Router();
-import { SigningCosmWasmClient, CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
-import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import { Web3Storage, File } from 'web3.storage';
 import { makeGatewayURL } from '../helpers/helpers.js';
 import pen from '../models/Pen.js';
+import { getWallet, get1stAccount, getAuraWasmClient, getSigningAuraWasmClient, contractAddress } from './BaseApi.js';
 
-const mnemonic = process.env.MNEMONIC;
-const rpcEndpoint = process.env.RPC;
-const contractAddress = process.env.CONTRACT;
 const web3Token = process.env.WEB3_STORAGE_TOKEN;
 const storage = new Web3Storage({ token: web3Token });
-
-let wallet;
-let firstAccount;
-let client;
-let signingClient;
-
-const getWallet = async () => {
-    const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, { prefix: 'aura' });
-    return wallet;
-}
-
-const get1stAccount = async (wallet) => {
-    const [firstAccount] = await wallet.getAccounts();
-    return firstAccount;
-}
-
-const getAuraWasmClient = async () => {
-    const client = await CosmWasmClient.connect(rpcEndpoint);
-    return client;
-}
-
-const getSigningAuraWasmClient = async (wallet) => {
-    const signingClient = await SigningCosmWasmClient.connectWithSigner(rpcEndpoint, wallet);
-    return signingClient;
-}
 
 function makeFileObjects(img) {
     // You can create File objects from a Buffer of binary data
@@ -93,67 +64,58 @@ router.route('/Token/Mint').post(async (req, res) => {
             schema: { $ref: '#/definitions/Mint' }
     } */
 
-    if (!wallet) {
-        wallet = await getWallet();
-    }
-    if (!firstAccount) {
-        firstAccount = await get1stAccount(wallet);
-    }
-    if (!signingClient) {
-        signingClient = await getSigningAuraWasmClient(wallet);
-    }
     try {
-    const result = await pen.create({
-        contract: contractAddress,
-        owner: firstAccount.address,
-        quality: req.body.quality,
-        level: req.body.level,
-        effect: req.body.effect,
-        resilience: req.body.resilience,
-        number_of_mints: req.body.number_of_mints,
-        durability: req.body.durability
-    });
-    if (result) {
-        const mintMsg = {
-            mint: {
-                id: `${result.index}`,
-                owner: result.owner,
+        const result = await pen.create({
+            contract: contractAddress,
+            owner: firstAccount.address,
+            quality: req.body.quality,
+            level: req.body.level,
+            effect: req.body.effect,
+            resilience: req.body.resilience,
+            number_of_mints: req.body.number_of_mints,
+            durability: req.body.durability
+        });
+        if (result) {
+            const mintMsg = {
+                mint: {
+                    id: `${result.index}`,
+                    owner: result.owner,
+                }
+            };
+
+            const fee = {
+                amount: [{
+                    denom: 'uaura',
+                    amount: '153',
+                },],
+                gas: '152375',
             }
-        };
 
-        const fee = {
-            amount: [{
-                denom: 'uaura',
-                amount: '153',
-            },],
-            gas: '152375',
+            try {
+                const response = await signingClient.execute(firstAccount.address, contractAddress, mintMsg, fee);
+                await pen.findOneAndUpdate({ index: result.index }, { deploy_status: true }, { upsert: true });
+
+                res.status(200).json({
+                    data: [response],
+                    message: 'Mint Result'
+                });
+            } catch (err) {
+                res.status(500).json({
+                    data: [err.message],
+                    message: 'Error'
+                });
+            }
         }
+    } catch (error) {
 
-        try {
-            const response = await signingClient.execute(firstAccount.address, contractAddress, mintMsg, fee);
-            await pen.findOneAndUpdate({index : result.index}, {deploy_status: true}, { upsert: true });
-
-            res.status(200).json({
-                data: [response],
-                message: 'Mint Result'
-            });
-        } catch (err) {
+        if (err) {
             res.status(500).json({
                 data: [err.message],
                 message: 'Error'
             });
         }
-    }
-   } catch (error) {
-    
-    if (err) {
-        res.status(500).json({
-            data: [err.message],
-            message: 'Error'
-        });
-    }
 
-   }
+    }
 
 })
 
@@ -254,6 +216,33 @@ router.route('/metadata/:contract/token/:index').get(async (req, res) => {
             message: 'Error'
         });
     }
+})
+
+/**
+ * Get token by owner
+ */
+
+router.route('/Token/:owner').get(async (req, res) => {
+    /* 	#swagger.tags = ['Token Mongodb']
+     #swagger.description = 'Get Info NFT Token' */
+    const conditions = {
+        owner: String(req.params.owner),
+    }
+
+    try {
+        const tokenInfo = await pen.findOne(conditions).exec();
+        res.status(200).json({
+            data: [tokenInfo],
+            message: 'Found Result'
+        });
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({
+            data: [err.message],
+            message: 'Error'
+        });
+    }
+
 })
 
 export default router
