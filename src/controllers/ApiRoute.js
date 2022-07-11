@@ -17,22 +17,22 @@ let firstAccount;
 let client;
 let signingClient;
 
-const getWallet = async () => {
+const getWallet = async() => {
     const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, { prefix: 'aura' });
     return wallet;
 }
 
-const get1stAccount = async (wallet) => {
+const get1stAccount = async(wallet) => {
     const [firstAccount] = await wallet.getAccounts();
     return firstAccount;
 }
 
-const getAuraWasmClient = async () => {
+const getAuraWasmClient = async() => {
     const client = await CosmWasmClient.connect(rpcEndpoint);
     return client;
 }
 
-const getSigningAuraWasmClient = async (wallet) => {
+const getSigningAuraWasmClient = async(wallet) => {
     const signingClient = await SigningCosmWasmClient.connectWithSigner(rpcEndpoint, wallet);
     return signingClient;
 }
@@ -48,7 +48,7 @@ function makeFileObjects(img) {
     return files
 }
 
-router.route('/Image/Upload').post(async (req, res) => {
+router.route('/Image/Upload').post(async(req, res) => {
     /* 	#swagger.tags = ['Image']
     #swagger.description = 'Upload image to IPFS' */
 
@@ -83,7 +83,7 @@ router.route('/Image/Upload').post(async (req, res) => {
     }
 })
 
-router.route('/Token/Mint').post(async (req, res) => {
+router.route('/Token/Mint').post(async(req, res) => {
     /* 	#swagger.tags = ['Token']
     #swagger.description = 'Mint NFT Token' */
 
@@ -103,61 +103,61 @@ router.route('/Token/Mint').post(async (req, res) => {
         signingClient = await getSigningAuraWasmClient(wallet);
     }
     try {
-    const result = await pen.create({
-        contract: contractAddress,
-        owner: firstAccount.address,
-        quality: req.body.quality,
-        level: req.body.level,
-        effect: req.body.effect,
-        resilience: req.body.resilience,
-        number_of_mints: req.body.number_of_mints,
-        durability: req.body.durability
-    });
-    if (result) {
-        const mintMsg = {
-            mint: {
-                id: `${result.index}`,
-                owner: result.owner,
+        const result = await pen.create({
+            contract: contractAddress,
+            owner: firstAccount.address,
+            quality: req.body.quality,
+            level: req.body.level,
+            effect: req.body.effect,
+            resilience: req.body.resilience,
+            number_of_mints: req.body.number_of_mints,
+            durability: req.body.durability
+        });
+        if (result) {
+            const mintMsg = {
+                mint: {
+                    id: `${result.index}`,
+                    owner: result.owner,
+                }
+            };
+
+            const fee = {
+                amount: [{
+                    denom: 'uaura',
+                    amount: '153',
+                }, ],
+                gas: '152375',
             }
-        };
 
-        const fee = {
-            amount: [{
-                denom: 'uaura',
-                amount: '153',
-            },],
-            gas: '152375',
+            try {
+                const response = await signingClient.execute(firstAccount.address, contractAddress, mintMsg, fee);
+                await pen.findOneAndUpdate({ index: result.index }, { deploy_status: true }, { upsert: true });
+
+                res.status(200).json({
+                    data: [response],
+                    message: 'Mint Result'
+                });
+            } catch (err) {
+                res.status(500).json({
+                    data: [err.message],
+                    message: 'Error'
+                });
+            }
         }
+    } catch (error) {
 
-        try {
-            const response = await signingClient.execute(firstAccount.address, contractAddress, mintMsg, fee);
-            await pen.findOneAndUpdate({index : result.index}, {deploy_status: true}, { upsert: true });
-
-            res.status(200).json({
-                data: [response],
-                message: 'Mint Result'
-            });
-        } catch (err) {
+        if (err) {
             res.status(500).json({
                 data: [err.message],
                 message: 'Error'
             });
         }
-    }
-   } catch (error) {
-    
-    if (err) {
-        res.status(500).json({
-            data: [err.message],
-            message: 'Error'
-        });
-    }
 
-   }
+    }
 
 })
 
-router.route('/Token/Get/:id').get(async (req, res) => {
+router.route('/Token/Get/:id').get(async(req, res) => {
     /* 	#swagger.tags = ['Token']
     #swagger.description = 'Mint NFT Token' */
 
@@ -185,7 +185,7 @@ router.route('/Token/Get/:id').get(async (req, res) => {
     }
 })
 
-router.post('/Token/Transfer', async (req, res, next) => {
+router.post('/Token/Transfer', async(req, res, next) => {
     /* 	#swagger.tags = ['Token']
         #swagger.description = 'Transfer NFT Token' */
 
@@ -215,7 +215,7 @@ router.post('/Token/Transfer', async (req, res, next) => {
         amount: [{
             denom: 'uaura',
             amount: '1000',
-        },],
+        }, ],
         gas: '152375',
     }
 
@@ -233,7 +233,7 @@ router.post('/Token/Transfer', async (req, res, next) => {
     }
 })
 
-router.route('/metadata/:contract/token/:index').get(async (req, res) => {
+router.route('/metadata/:contract/token/:index').get(async(req, res) => {
     /* 	#swagger.tags = ['Token Mongodb']
     #swagger.description = 'Get Info NFT Token' */
     const conditions = {
@@ -255,5 +255,4 @@ router.route('/metadata/:contract/token/:index').get(async (req, res) => {
         });
     }
 })
-
 export default router

@@ -1,4 +1,3 @@
-
 import express from 'express';
 
 const router = express.Router();
@@ -12,6 +11,8 @@ import apiConnectWallet from './controllers/ConnectWallet.js';
 
 router.use(apiV1);
 
-router.use(apiConnectWallet);
+router.use('/connect-wallet', (req, res) => {
+    res.render('connect_wallet');
+});
 
 export default router
