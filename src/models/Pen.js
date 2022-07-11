@@ -1,4 +1,4 @@
-import {main, AutoIncrement} from './db.js';
+import {main, AutoIncrement, paginate} from './db.js';
 import mongoose from 'mongoose';
 var Schema = mongoose.Schema;
 
@@ -15,6 +15,7 @@ const penSchema = new Schema({
 });
 
 penSchema.plugin(AutoIncrement, {inc_field: "index" });
+penSchema.plugin(paginate);
 
 const pen = mongoose.model('pens', penSchema);
 

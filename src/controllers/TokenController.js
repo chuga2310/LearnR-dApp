@@ -3,7 +3,7 @@ const router = express.Router();
 import { Web3Storage, File } from 'web3.storage';
 import { makeGatewayURL } from '../helpers/helpers.js';
 import pen from '../models/Pen.js';
-import { getWallet, get1stAccount, getAuraWasmClient, getSigningAuraWasmClient, contractAddress } from './BaseApi.js';
+import { getWallet, get1stAccount, getAuraWasmClient, getSigningAuraWasmClient, contractAddress } from './ClientController.js';
 
 const web3Token = process.env.WEB3_STORAGE_TOKEN;
 const storage = new Web3Storage({ token: web3Token });
@@ -219,18 +219,26 @@ router.route('/metadata/:contract/token/:index').get(async (req, res) => {
 })
 
 /**
- * Get token by owner
+ * Get list token by owner
  */
 
-router.route('/Token/:owner').get(async (req, res) => {
+router.route('/Token/:owner/:page').get(async (req, res) => {
     /* 	#swagger.tags = ['Token Mongodb']
      #swagger.description = 'Get Info NFT Token' */
     const conditions = {
         owner: String(req.params.owner),
     }
 
+    var options = {
+        page: req.params.page,
+        limit: 10,
+        sort: {
+            index : -1
+        },
+    };
+
     try {
-        const tokenInfo = await pen.findOne(conditions).exec();
+        const tokenInfo = await pen.paginate(conditions, options);
         res.status(200).json({
             data: [tokenInfo],
             message: 'Found Result'
