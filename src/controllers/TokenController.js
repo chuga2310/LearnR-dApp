@@ -3,7 +3,9 @@ const router = express.Router();
 import { Web3Storage, File } from 'web3.storage';
 import { makeGatewayURL } from '../helpers/helpers.js';
 import pen from '../models/Pen.js';
+import TokenAccess from '../models/TokenAccess.js';
 import { getWallet, get1stAccount, getAuraWasmClient, getSigningAuraWasmClient, contractAddress } from './ClientController.js';
+import { randomBytes } from 'crypto';
 
 const web3Token = process.env.WEB3_STORAGE_TOKEN;
 const storage = new Web3Storage({ token: web3Token });
@@ -196,15 +198,20 @@ router.post('/Token/Transfer', async (req, res, next) => {
 })
 
 router.route('/metadata/:contract/token/:index').get(async (req, res) => {
-    /* 	#swagger.tags = ['Token Mongodb']
+    /* 	#swagger.tags = ['Token']
     #swagger.description = 'Get Info NFT Token' */
-    const conditions = {
-        index: String(req.params.index),
-        contract: String(req.params.contract)
-    }
 
     try {
-        const tokenInfo = await pen.findOne(conditions).exec();
+        const result = await pen.create({
+            contract: contractAddress,
+            owner: firstAccount.address,
+            quality: req.body.quality,
+            level: req.body.level,
+            effect: req.body.effect,
+            resilience: req.body.resilience,
+            number_of_mints: req.body.number_of_mints,
+            durability: req.body.durability
+        });
         res.status(200).json({
             data: [tokenInfo],
             message: 'Found Result'
@@ -223,7 +230,7 @@ router.route('/metadata/:contract/token/:index').get(async (req, res) => {
  */
 
 router.route('/token/:owner/:page').get(async (req, res) => {
-    /* 	#swagger.tags = ['Token Mongodb']
+    /* 	#swagger.tags = ['Token']
      #swagger.description = 'Get Info NFT Token' */
     const conditions = {
         owner: String(req.params.owner),
@@ -241,6 +248,28 @@ router.route('/token/:owner/:page').get(async (req, res) => {
         const tokenInfo = await pen.paginate(conditions, options);
         res.status(200).json({
             data: [tokenInfo],
+            message: 'Found Result'
+        });
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({
+            data: [err.message],
+            message: 'Error'
+        });
+    }
+
+})
+
+router.route('/token-access/generate').post(async (req, res) => {
+    /* 	#swagger.tags = ['Token']
+     #swagger.description = 'Generate token access' */
+    try {
+        var result = await TokenAccess.create({
+            token : randomBytes(20).toString('hex'),
+            is_active : true,
+        });
+        res.status(200).json({
+            data: [result],
             message: 'Found Result'
         });
     } catch (err) {

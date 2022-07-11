@@ -9,6 +9,9 @@ router.use(fileUpload());
 
 import apiV1 from './controllers/TokenController.js';
 import apiConnectWallet from './controllers/ConnectWalletController.js';
+// import checkAuth from './middleware/BaseMiddleware.js';
+
+// router.use(checkAuth);
 
 router.use(apiV1);
 
