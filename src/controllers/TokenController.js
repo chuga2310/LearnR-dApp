@@ -222,7 +222,7 @@ router.route('/metadata/:contract/token/:index').get(async (req, res) => {
  * Get list token by owner
  */
 
-router.route('/Token/:owner/:page').get(async (req, res) => {
+router.route('/token/:owner/:page').get(async (req, res) => {
     /* 	#swagger.tags = ['Token Mongodb']
      #swagger.description = 'Get Info NFT Token' */
     const conditions = {
@@ -230,7 +230,7 @@ router.route('/Token/:owner/:page').get(async (req, res) => {
     }
 
     var options = {
-        page: req.params.page,
+        page: req.params.page || 1,
         limit: 10,
         sort: {
             index : -1
