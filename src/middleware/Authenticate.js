@@ -3,12 +3,12 @@ import express from 'express';
 
 const router = express.Router();
 import TokenAccess from '../models/TokenAccess.js';
+import nonSecurePaths from '../config/NoneSecureRoute.js';
 
 /**
  * MiddleWare
  */
 router.use(async function (req, res, next) {
-    const nonSecurePaths = ['/token-access/generate'];
     if (nonSecurePaths.includes(req.path)) return next();
 
     if (!req.headers.authorization) {
