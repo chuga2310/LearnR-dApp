@@ -3,9 +3,7 @@ const router = express.Router();
 import { Web3Storage, File } from 'web3.storage';
 import { makeGatewayURL } from '../helpers/helpers.js';
 import pen from '../models/Pen.js';
-import TokenAccess from '../models/TokenAccess.js';
 import { getWallet, get1stAccount, getAuraWasmClient, getSigningAuraWasmClient, contractAddress } from './ClientController.js';
-import { randomBytes } from 'crypto';
 
 const web3Token = process.env.WEB3_STORAGE_TOKEN;
 const storage = new Web3Storage({ token: web3Token });
@@ -247,28 +245,6 @@ router.route('/token/:owner/:page').get(async (req, res) => {
         const tokenInfo = await pen.paginate(conditions, options);
         res.status(200).json({
             data: [tokenInfo],
-            message: 'Found Result'
-        });
-    } catch (err) {
-        console.log(err)
-        res.status(500).json({
-            data: [err.message],
-            message: 'Error'
-        });
-    }
-
-})
-
-router.route('/token-access/generate').post(async (req, res) => {
-    /* 	#swagger.tags = ['Token']
-     #swagger.description = 'Generate token access' */
-    try {
-        var result = await TokenAccess.create({
-            token: randomBytes(20).toString('hex'),
-            is_active: true,
-        });
-        res.status(200).json({
-            data: [result],
             message: 'Found Result'
         });
     } catch (err) {

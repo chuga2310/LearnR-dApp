@@ -7,6 +7,8 @@ import fileUpload from 'express-fileupload';
 router.use(fileUpload());
 
 import apiV1 from './controllers/TokenController.js';
+import apiAuthentication from './controllers/AuthenticateController.js';
+
 import apiConnectWallet from './controllers/ConnectWalletController.js';
 import checkAuth from './middleware/Authenticate.js';
 
@@ -19,9 +21,10 @@ router.use(checkAuth);
  * Route
  */
 router.use(apiV1);
+router.use(apiAuthentication);
 
 router.use('/connect-wallet', (req, res) => {
     res.render('connect_wallet');
 });
 
-export default router
+export default router;

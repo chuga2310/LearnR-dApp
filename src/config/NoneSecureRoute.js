@@ -1,5 +1,5 @@
 const nonSecurePaths = [
-    '/token-access/generate'
+    '/token-access/generate',
 ];
 
 export default nonSecurePaths;

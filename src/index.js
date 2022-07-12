@@ -34,13 +34,15 @@ app.set('views', path.join(__dirname, "./public/views")); // use pug templates f
 
 import bodyParser from 'body-parser';
 app.use(bodyParser.json());
-/* Routes */
+/* Routes */ 
 import router from './routes.js';
 /* Middlewares */
-app.use(router);
+
 app.use('/static', express.static(path.join(__dirname, 'public')))
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
+
+app.use(router);
 
 app.listen(3000, () => {
     console.log("Server is running!\nAPI documentation: http://localhost:3000/docs");
