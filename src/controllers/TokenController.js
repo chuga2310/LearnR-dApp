@@ -89,8 +89,6 @@ router.route('/Token/Mint').post(async(req, res) => {
                     amount: [{
                         denom: 'uaura',
                         amount: '153',
-                        <<
-                        << << < HEAD: src / controllers / ApiRoute.js
                     }, ],
                     gas: '152375',
                 }
@@ -110,42 +108,7 @@ router.route('/Token/Mint').post(async(req, res) => {
                     });
                 }
             }
-        } catch (error) {
-
-            ===
-            === =
-        }, ],
-    gas: '152375',
-}
-
-try {
-    const response = await signingClient.execute(firstAccount.address, contractAddress, mintMsg, fee);
-    await pen.findOneAndUpdate({ index: result.index }, { deploy_status: true }, { upsert: true });
-
-    res.status(200).json({
-        data: [response],
-        message: 'Mint Result'
-    });
-} catch (err) {
-    res.status(500).json({
-        data: [err.message],
-        message: 'Error'
-    });
-}
-}
-} catch (error) {
-
-    >>>
-    >>> > 106 a4723b7357a74944ed4b8f88708573c8672f7: src / controllers / TokenController.js
-    if (err) {
-        res.status(500).json({
-            data: [err.message],
-            message: 'Error'
-        });
-    }
-
-}
-
+        }
 })
 
 router.route('/Token/Get/:id').get(async(req, res) => {
@@ -224,8 +187,6 @@ router.post('/Token/Transfer', async(req, res, next) => {
     }
 })
 
-<<
-<< << < HEAD: src / controllers / ApiRoute.js
 router.route('/metadata/:contract/token/:index').get(async(req, res) => {
     /* 	#swagger.tags = ['Token Mongodb']
 =======
