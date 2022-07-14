@@ -1,9 +1,4 @@
 window.onload = async() => {
-    console.log('start request add halo testnet');
-    if (!window.keplr) {
-        alert('Please install Coin98 extension')
-        return
-    }
     await window['keplr'].experimentalSuggestChain({
         chainId: "halo-testnet-001",
         chainName: "Aura halo TestNet",
@@ -49,8 +44,5 @@ window.onload = async() => {
         logo: "https://i.imgur.com/zi0mTYb.png",
         explorer: "https://halo.aurascan.io/"
     });
-    const account = (await window.getOfflineSigner('halo-testnet-001').getAccounts())[0]
-    const preTag = document.getElementById('json')
-    preTag.textContent = JSON.stringify({ address: account.address }, undefined, 2)
     console.log('finish request add halo testnet');
-}
+};

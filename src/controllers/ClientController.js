@@ -1,35 +1,22 @@
 import express from 'express';
 const router = express.Router();
-import { SigningCosmWasmClient, CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
-import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 
-const mnemonic = process.env.MNEMONIC;
-const rpcEndpoint = process.env.RPC;
-const contractAddress = process.env.CONTRACT;
+router.get('/get-offline-signer', (req, res) => {
+    res.render('offline_signer', {
+        targetUrl: req.query.targetUrl
+    })
+})
 
-let firstAccount;
-let client;
-let signingClient;
+router.get('/connect-wallet', async(req, res) => {
+    // const client = await SigningCosmWasmClient.connect({ url: 'https://rpc.halo.aura.network/' })
+    //     // client.execute(
+    //     // )
+    // console.log(Object.values(req.query.offlineSigner))
+    // res.status(200).json({
+    //     data: [],
+    //     message: 'Upload Result'
+    // });
+})
 
-const getWallet = async () => {
-    return await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, { prefix: 'aura' });
-}
 
-const get1stAccount = async () => {
-    const wallet = await getWallet();
-    [firstAccount] = await wallet.getAccounts();
-    return firstAccount;
-}
-
-const getAuraWasmClient = async () => {
-    client = await CosmWasmClient.connect(rpcEndpoint);
-    return client;
-}
-
-const getSigningAuraWasmClient = async () => {
-    const wallet = await getWallet();
-    signingClient = await SigningCosmWasmClient.connectWithSigner(rpcEndpoint, wallet);
-    return signingClient;
-}
-
-export { getWallet, get1stAccount, getAuraWasmClient, getSigningAuraWasmClient, contractAddress };
+export default router;
