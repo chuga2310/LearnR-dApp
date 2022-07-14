@@ -14,7 +14,7 @@ window.onload = () => {
                     'aura1tsswv2jnp7kdgn33q3kwmj9jfnlxjpxqq2squ6la3l8mh40djcqqr0xshd';
                 let execMsg = {
                     mint: {
-                        id: "-2",
+                        id: "-4",
                         owner: 'aura1csk4psx5gz0l7c9u65289pwecntpwk9vf0c2xv'
                     }
                 }

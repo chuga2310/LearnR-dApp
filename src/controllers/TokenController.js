@@ -3,7 +3,7 @@ const router = express.Router();
 import { Web3Storage, File } from 'web3.storage';
 import { makeGatewayURL } from '../helpers/helpers.js';
 import pen from '../models/Pen.js';
-import { getWallet, get1stAccount, getAuraWasmClient, getSigningAuraWasmClient, contractAddress } from './LearnRWalletController.js';
+import { getWallet, get1stAccount, getAuraWasmClient, getSigningAuraWasmClient, contractAddress, sendTokensQuiz } from './LearnRWalletController.js';
 
 const web3Token = process.env.WEB3_STORAGE_TOKEN;
 const storage = new Web3Storage({ token: web3Token });
@@ -88,7 +88,7 @@ router.route('/Token/Mint').post(async(req, res) => {
                     denom: 'uaura',
                     amount: '153',
                 }, ],
-                gas: '152375',
+                gas: '100000',
             }
 
             try {
@@ -256,4 +256,35 @@ router.route('/token/:owner/:page').get(async(req, res) => {
     }
 
 })
+
+/**
+ * Get list token by owner
+ */
+
+router.route('/earn/token/quiz').post(async(req, res) => {
+    /* 	#swagger.tags = ['Token']
+     #swagger.description = 'Send token to users when they do quiz' */
+
+    try {
+        let receivedAddress = req.body.received_address;
+        let point = req.body.point;
+        let pen_level = req.body.pen_level;
+        let total_time_of_course = req.body.total_time_of_course;
+
+        const result = await sendTokensQuiz(receivedAddress, point, pen_level, total_time_of_course);
+
+        res.status(200).json({
+            data: [result],
+            message: 'Found Result'
+        });
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({
+            data: [err.message],
+            message: 'Error'
+        });
+    }
+
+})
+
 export default router
