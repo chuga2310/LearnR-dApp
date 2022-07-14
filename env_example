@@ -1,5 +1,20 @@
-MNEMONIC='xxxxxxx'
-RPC='http://xxxx:xxx'
-CONTRACT='contract address'
+# mnemonic of client's wallet, which execute the contract. 
+MNEMONIC='cute refuse identify blossom subway wink print clarify twice spot approve clog sniff reward profit opinion clock start blood law metal grunt voice ensure'
+# Aura Testnet RPC: https://rpc.serenity.aura.network:443
+RPC='https://rpc.halo.aura.network:443'
+# RPC='127.0.0.1:56760'
 
-WEB3_STORAGE_TOKEN='xxxxxx'
+CONTRACT=
+WEB3_STORAGE_TOKEN=
+
+DB_CONNECTION=mongodb
+DB_HOST=127.0.0.1
+DB_PORT=27017
+DB_DATABASE=learn-to-earn
+DB_USERNAME=
+DB_PASSWORD=
+DB_URL = 
+
+COEFFICIENT_EARNING = 
+RATIO = 
+CURRENCY = 
