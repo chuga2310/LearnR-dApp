@@ -1,30 +1,15 @@
 import express from 'express';
 
 const router = express.Router();
-// import bodyParser from 'body-parser';
-import fileUpload from 'express-fileupload';
-// router.use(bodyParser.json());
-router.use(fileUpload());
 
 import apiV1 from './controllers/TokenController.js';
 import apiAuthentication from './controllers/AuthenticateController.js';
 
-import apiConnectWallet from './controllers/ConnectWalletController.js';
 import checkAuth from './middleware/Authenticate.js';
-
-/**
- * Middleware
- */
-router.use(checkAuth);
-
 /**
  * Route
  */
-router.use(apiV1);
-// router.use(apiAuthentication);
-
-router.use('/connect-wallet', (req, res) => {
-    res.render('connect_wallet');
-});
+router.use(checkAuth, apiV1);
+router.use(apiAuthentication);
 
 export default router;

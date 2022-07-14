@@ -1,10 +1,6 @@
-html
-  head
-    script(type='text/javascript')
-      include js/connect-wallet.js
-  block content
-    pre#json
-    //- img(src="/images/hn.png" width="180" height="180")
-    //- form(action='/search' method='GET')
-    //-   input.home-input(autofocus='' placeholder='Search Hacker News' type='search' name='q')
-    
+extend default.pug
+block scripts
+  script
+      include ./js/connect-wallet.js
+  //- script
+    //- include ./js/excute-contract.js

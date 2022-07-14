@@ -1,63 +1,40 @@
-import path from 'path'
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(
-    import.meta.url);
+var path = require('path'); // used to get context
+var fs = require('fs');
+const { resolve } = require('path');
 
-// 👇️ "/home/john/Desktop/javascript"
-const __dirname = path.dirname(__filename);
-
-import nodeExternals from 'webpack-node-externals'
-
-const isProduction = false;
-const mode = isProduction ? 'production' : 'development';
-const devtool = isProduction ? false : 'inline-source-map';
-export default {
-    entry: './app.js',
-    target: 'node',
-    mode,
-    devtool,
-    externals: [nodeExternals()],
-    module: {
-        rules: [{
-                test: /\.js$/,
-                exclude: /node_modules/,
-                use: [{
-                    loader: 'babel-loader',
-                }],
-                parser: {
-                    javascript: {
-                        commonjsMagicComments: true,
-                    },
-                },
-            },
-            {
-                test: /\.ts$/,
-                exclude: /node_modules/,
-                use: [{
-                        loader: 'babel-loader',
-                    },
-                    {
-                        loader: 'ts-loader',
-                    },
-                ]
-            }
-        ]
-    },
-    resolve: {
-        extensions: ['.js', '.ts', '.json']
-    },
+module.exports = {
+    context: __dirname, // resolves entry below, must be absolute path
+    entry: './app.js', // entry point or loader for the application
     output: {
-        filename: 'server.js',
-        path: path.resolve(__dirname, 'build'),
-        library: 'server', // very important line
-        libraryTarget: 'umd', // very important line
-        umdNamedDefine: true // very important line
-    },
-    node: {
-        __dirname: false,
-        __filename: false,
+        path: path.join(__dirname, 'app/lib'), // express static folder is at /app/lib
+        filename: '[name].bundle.js', // the file name of the bundle to create.  [name] is replaced by the name of the chunk (code-splitting)
+        publicPath: 'static' // example uses express as the webserver
     },
     experiments: {
         topLevelAwait: true
+    },
+    externals: fs.readdirSync("node_modules")
+        .reduce(function(acc, mod) {
+            if (mod === ".bin") {
+                return acc
+            }
+
+            acc[mod] = "commonjs " + mod
+            return acc
+        }, {}),
+    loader: {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loaders: [
+            "babel?{stage:0,jsxPragma:'this.createElement'}",
+            "eslint",
+        ],
+    },
+    resolve: {
+        fallback: {
+            "crypto": require.resolve("crypto-browserify"),
+            "path": require.resolve('path'),
+            "os": require.resolve("os-browserify/browser")
+        }
     }
-};
+}
