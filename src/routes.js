@@ -21,7 +21,7 @@ router.use(checkAuth);
  * Route
  */
 router.use(apiV1);
-router.use(apiAuthentication);
+// router.use(apiAuthentication);
 
 router.use('/connect-wallet', (req, res) => {
     res.render('connect_wallet');
