@@ -2,7 +2,7 @@ import express from 'express';
 const router = express.Router();
 
 router.get('/get-offline-signer', (req, res) => {
-    res.render('offline_signer', {
+    res.render('offline_signer.pug', {
         targetUrl: req.query.targetUrl
     })
 })
