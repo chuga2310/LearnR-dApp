@@ -10,6 +10,6 @@ import checkAuth from './middleware/Authenticate.js';
  * Route
  */
 router.use(checkAuth, apiV1);
-router.use(apiAuthentication);
+// router.use(apiAuthentication);
 
 export default router;
