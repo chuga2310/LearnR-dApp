@@ -65,6 +65,9 @@ router.route('/Token/Mint').post(async(req, res) => {
     } */
 
     try {
+        let firstAccount = await get1stAccount();
+        let signingClient = await getSigningAuraWasmClient();
+
         const result = await pen.create({
             contract: contractAddress,
             owner: firstAccount.address,
@@ -191,24 +194,16 @@ router.post('/Token/Transfer', async(req, res, next) => {
 })
 
 router.route('/metadata/:contract/token/:index').get(async(req, res) => {
-    /* 	#swagger.tags = ['Token Mongodb']
-=======
-router.route('/metadata/:contract/token/:index').get(async (req, res) => {
     /* 	#swagger.tags = ['Token']
->>>>>>> 106a4723b7357a74944ed4b8f88708573c8672f7:src/controllers/TokenController.js
     #swagger.description = 'Get Info NFT Token' */
 
     try {
-        const result = await pen.create({
-            contract: contractAddress,
-            owner: firstAccount.address,
-            quality: req.body.quality,
-            level: req.body.level,
-            effect: req.body.effect,
-            resilience: req.body.resilience,
-            number_of_mints: req.body.number_of_mints,
-            durability: req.body.durability
-        });
+        const conditions = {
+            index: String(req.params.index),
+            contract: String(req.params.contract)
+        }
+
+        const tokenInfo = await pen.findOne(conditions).exec();
         res.status(200).json({
             data: [tokenInfo],
             message: 'Found Result'
@@ -226,7 +221,7 @@ router.route('/metadata/:contract/token/:index').get(async (req, res) => {
  * Get list token by owner
  */
 
-router.route('/token/:owner/:page').get(async(req, res) => {
+router.route('/token/:owner').get(async(req, res) => {
     /* 	#swagger.tags = ['Token']
      #swagger.description = 'Get Info NFT Token' */
     const conditions = {
@@ -234,8 +229,8 @@ router.route('/token/:owner/:page').get(async(req, res) => {
     }
 
     var options = {
-        page: req.params.page || 1,
-        limit: 10,
+        page: req.query.page || 1,
+        limit: 1,
         sort: {
             index: -1
         },
@@ -268,14 +263,14 @@ router.route('/earn/token/quiz').post(async(req, res) => {
     try {
         let receivedAddress = req.body.received_address;
         let point = req.body.point;
-        let pen_level = req.body.pen_level;
+        let pen_index = req.body.pen_index;
         let total_time_of_course = req.body.total_time_of_course;
 
-        const result = await sendTokensQuiz(receivedAddress, point, pen_level, total_time_of_course);
+        const result = await sendTokensQuiz(receivedAddress, point, pen_index, total_time_of_course);
 
         res.status(200).json({
             data: [result],
-            message: 'Found Result'
+            message: 'Successful'
         });
     } catch (err) {
         console.log(err)
