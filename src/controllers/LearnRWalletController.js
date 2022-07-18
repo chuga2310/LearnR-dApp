@@ -11,7 +11,6 @@ const rpcEndpoint = process.env.RPC;
 const contractAddress = process.env.CONTRACT;
 const ratio = process.env.RATIO;
 const currency = process.env.CURRENCY;
-const decreaseTotalTimePercent = 0.1;
 
 let firstAccount;
 let client;
@@ -46,9 +45,7 @@ const sendTokensQuiz = async(receivedAddress, point, pen_index, total_time_of_co
     {
         const adminWallet = (await get1stAccount()).address;
 
-        let decreaseTotalTime = total_time_of_course * decreaseTotalTimePercent;
-
-        let sumTokens = ratio * cal_earning_quiz_mode(point, pen.level, decreaseTotalTime);
+        let sumTokens = ratio * cal_earning_quiz_mode(point, pen.level, total_time_of_course);
 
         let client = await getSigningAuraWasmClient();
         const amount = [

@@ -141,6 +141,8 @@ function cal_earning_quiz_mode(point, pen_level, total_time_of_course) {
     else if (point > 0.75) {
         value_factor = 2.5;
     }
+    /**  Giảm điểm để test */
+    value_factor = value_factor * 0.01;
 
     let token_learning = point * value_factor * Math.pow((PLerE + PLerEC), Number(COEFFICIENT_EARNING)) 
     return token_learning;
