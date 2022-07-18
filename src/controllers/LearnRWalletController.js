@@ -60,7 +60,7 @@ const sendTokensQuiz = async(receivedAddress, point, pen_index, total_time_of_co
         };
         return client.sendTokens(adminWallet, receivedAddress, amount, fee);
     }
-    return false;
+    return null;
 }
 
 export { getWallet, get1stAccount, getAuraWasmClient, getSigningAuraWasmClient, contractAddress, sendTokensQuiz };
