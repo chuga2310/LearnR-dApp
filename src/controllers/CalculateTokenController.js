@@ -11,7 +11,7 @@ COEFFICIENT_EARNING = process.env.COEFFICIENT_EARNING;;
 */
 function earn_learning_level(pen_level, total_time_of_course) {
     let token_result = 0;
-
+    
     if (pen_level == 1) {
         token_result = Math.floor((total_time_of_course / 840) * 3);
     }
@@ -24,7 +24,7 @@ function earn_learning_level(pen_level, total_time_of_course) {
     else if (pen_level == 4) {
         token_result = Math.floor((total_time_of_course / 480) * 3);
     }
-    else if (pen_level == 5) {
+    else if (pen_level >= 5) {
         token_result = Math.floor((total_time_of_course / 360) * 3);
     }
 
@@ -142,8 +142,7 @@ function cal_earning_quiz_mode(point, pen_level, total_time_of_course) {
         value_factor = 2.5;
     }
 
-    let token_learning = point * value_factor * Math.pow((PLerE + PLerEC), Number(COEFFICIENT_EARNING))
-
+    let token_learning = point * value_factor * Math.pow((PLerE + PLerEC), Number(COEFFICIENT_EARNING)) 
     return token_learning;
 }
 

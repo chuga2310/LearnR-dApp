@@ -1,11 +1,16 @@
 import express from 'express';
 const router = express.Router();
 import { SigningCosmWasmClient, CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
-import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
+import { DirectSecp256k1HdWallet, coin } from '@cosmjs/proto-signing';
+import {cal_earning_quiz_mode} from '../controllers/CalculateTokenController.js';
+
+import Pen from '../models/Pen.js';
 
 const mnemonic = process.env.MNEMONIC;
 const rpcEndpoint = process.env.RPC;
 const contractAddress = process.env.CONTRACT;
+const ratio = process.env.RATIO;
+const currency = process.env.CURRENCY;
 
 let firstAccount;
 let client;
@@ -33,23 +38,29 @@ const getSigningAuraWasmClient = async() => {
 }
 
 
-const sendTokensQuiz = async(receivedAddress, point, pen_level, total_time_of_course) => {
-    const adminWallet = (await get1stAccount()).address;
-    let sumTokens = ratio * cal_earning_quiz_mode(point, pen_level, total_time_of_course);
+const sendTokensQuiz = async(receivedAddress, point, pen_index, total_time_of_course) => {
 
-    let client = await getSigningAuraWasmClient();
-    const amount = [
-        coin(`${Math.round(sumTokens)}`, currency)
-    ];
+    let pen = await Pen.findOne({ index: pen_index, deploy_status: true }).exec();
+    if(pen) 
+    {
+        const adminWallet = (await get1stAccount()).address;
+        let sumTokens = ratio * cal_earning_quiz_mode(point, pen.level, total_time_of_course);
 
-    const fee = {
-        amount: [{
-            denom: 'uaura',
-            amount: '153',
-        }, ],
-        gas: '100000',
-    };
-    return client.sendTokens(adminWallet, receivedAddress, amount, fee);
+        let client = await getSigningAuraWasmClient();
+        const amount = [
+            coin(`${Math.round(sumTokens)}`, currency)
+        ];
+
+        const fee = {
+            amount: [{
+                denom: 'uaura',
+                amount: '153',
+            }, ],
+            gas: '100000',
+        };
+        return client.sendTokens(adminWallet, receivedAddress, amount, fee);
+    }
+    return false;
 }
 
 export { getWallet, get1stAccount, getAuraWasmClient, getSigningAuraWasmClient, contractAddress, sendTokensQuiz };

@@ -263,14 +263,14 @@ router.route('/earn/token/quiz').post(async(req, res) => {
     try {
         let receivedAddress = req.body.received_address;
         let point = req.body.point;
-        let pen_level = req.body.pen_level;
+        let pen_index = req.body.pen_index;
         let total_time_of_course = req.body.total_time_of_course;
 
-        const result = await sendTokensQuiz(receivedAddress, point, pen_level, total_time_of_course);
+        const result = await sendTokensQuiz(receivedAddress, point, pen_index, total_time_of_course);
 
         res.status(200).json({
             data: [result],
-            message: 'Found Result'
+            message: 'Successful'
         });
     } catch (err) {
         console.log(err)
