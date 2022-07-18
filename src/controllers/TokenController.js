@@ -1,6 +1,6 @@
 import express from 'express';
-const router = express.Router();
-const publicRoute = express.Router();
+const privateRouter = express.Router();
+const publicRouter = express.Router();
 import { Web3Storage, File } from 'web3.storage';
 import { makeGatewayURL } from '../helpers/helpers.js';
 import pen from '../models/Pen.js';
@@ -21,7 +21,7 @@ function makeFileObjects(img) {
     return files
 }
 
-router.route('/Image/Upload').post(async (req, res) => {
+privateRouter.route('/Image/Upload').post(async (req, res) => {
     /* 	#swagger.tags = ['Image']
     #swagger.description = 'Upload image to IPFS' */
 
@@ -58,7 +58,7 @@ router.route('/Image/Upload').post(async (req, res) => {
     }
 })
 
-router.route('/Token/Mint').post(async (req, res) => {
+privateRouter.route('/Token/Mint').post(async (req, res) => {
     /* 	#swagger.tags = ['Token']
     #swagger.description = 'Mint NFT Token' */
 
@@ -121,7 +121,7 @@ router.route('/Token/Mint').post(async (req, res) => {
     }
 })
 
-router.route('/Token/Mint/Owner').post(async (req, res) => {
+privateRouter.route('/Token/Mint/Owner').post(async (req, res) => {
     /* 	#swagger.tags = ['Token']
     #swagger.description = 'Mint NFT Token' */
 
@@ -165,7 +165,7 @@ router.route('/Token/Mint/Owner').post(async (req, res) => {
     }
 })
 
-router.route('/Token/Get/:id').get(async (req, res) => {
+privateRouter.route('/Token/Get/:id').get(async (req, res) => {
     /* 	#swagger.tags = ['Token']
     #swagger.description = 'Mint NFT Token' */
 
@@ -187,7 +187,7 @@ router.route('/Token/Get/:id').get(async (req, res) => {
     }
 })
 
-router.post('/Token/Transfer', async (req, res, next) => {
+privateRouter.post('/Token/Transfer', async (req, res, next) => {
     /* 	#swagger.tags = ['Token']
         #swagger.description = 'Transfer NFT Token' */
 
@@ -235,7 +235,10 @@ router.post('/Token/Transfer', async (req, res, next) => {
     }
 })
 
-router.route('/metadata/:contract/token/:index').get(async (req, res) => {
+/**
+ * Get Token by contract and index
+ */
+publicRouter.route('/metadata/:contract/token/:index').get(async (req, res) => {
     /* 	#swagger.tags = ['Token']
     #swagger.description = 'Get Info NFT Token' */
 
@@ -257,7 +260,7 @@ router.route('/metadata/:contract/token/:index').get(async (req, res) => {
  * Get list token by owner
  */
 
-router.route('/token/:owner').get(async (req, res) => {
+publicRouter.route('/token/:owner').get(async (req, res) => {
     /* 	#swagger.tags = ['Token']
      #swagger.description = 'Get Info NFT Token' */
     const conditions = {
@@ -286,7 +289,7 @@ router.route('/token/:owner').get(async (req, res) => {
  * Get list token by owner
  */
 
-router.route('/earn/token/quiz').post(async (req, res) => {
+privateRouter.route('/earn/token/quiz').post(async (req, res) => {
     /* 	#swagger.tags = ['Token']
      #swagger.description = 'Send token to users when they do quiz' */
 
@@ -306,4 +309,4 @@ router.route('/earn/token/quiz').post(async (req, res) => {
 
 })
 
-export default router
+export { privateRouter, publicRouter};
