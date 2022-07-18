@@ -1,9 +1,11 @@
 import express from 'express';
 const router = express.Router();
+const publicRoute = express.Router();
 import { Web3Storage, File } from 'web3.storage';
 import { makeGatewayURL } from '../helpers/helpers.js';
 import pen from '../models/Pen.js';
 import { getWallet, get1stAccount, getAuraWasmClient, getSigningAuraWasmClient, contractAddress, sendTokensQuiz } from './LearnRWalletController.js';
+import { success, error } from './BaseApi';
 
 const web3Token = process.env.WEB3_STORAGE_TOKEN;
 const storage = new Web3Storage({ token: web3Token });
@@ -19,7 +21,7 @@ function makeFileObjects(img) {
     return files
 }
 
-router.route('/Image/Upload').post(async(req, res) => {
+router.route('/Image/Upload').post(async (req, res) => {
     /* 	#swagger.tags = ['Image']
     #swagger.description = 'Upload image to IPFS' */
 
@@ -43,18 +45,20 @@ router.route('/Image/Upload').post(async(req, res) => {
         const metadataURI = `ipfs://${cid}/metadata.json`;
 
         res.status(200).json({
-            data: [{ cid, metadataGatewayURL, imageGatewayURL, imageURI, metadataURI }],
-            message: 'Upload Result'
+            data: { cid, metadataGatewayURL, imageGatewayURL, imageURI, metadataURI },
+            message: 'Upload Result',
+            statusCode: 200,
+            success: true,
         });
     } catch (err) {
         res.status(500).json({
-            data: [err.message],
+            data: err.message,
             message: 'Error'
         });
     }
 })
 
-router.route('/Token/Mint').post(async(req, res) => {
+router.route('/Token/Mint').post(async (req, res) => {
     /* 	#swagger.tags = ['Token']
     #swagger.description = 'Mint NFT Token' */
 
@@ -90,7 +94,7 @@ router.route('/Token/Mint').post(async(req, res) => {
                 amount: [{
                     denom: 'uaura',
                     amount: '153',
-                }, ],
+                },],
                 gas: '100000',
             }
 
@@ -117,7 +121,7 @@ router.route('/Token/Mint').post(async(req, res) => {
     }
 })
 
-router.route('/Token/Mint/Owner').post(async(req, res) => {
+router.route('/Token/Mint/Owner').post(async (req, res) => {
     /* 	#swagger.tags = ['Token']
     #swagger.description = 'Mint NFT Token' */
 
@@ -128,50 +132,31 @@ router.route('/Token/Mint/Owner').post(async(req, res) => {
     } */
 
     try {
-        let firstAccount = await get1stAccount();
-        let signingClient = await getSigningAuraWasmClient();
 
-        const result = await pen.create({
-            contract: contractAddress,
-            owner: firstAccount.address,
-            quality: req.body.quality,
-            level: req.body.level,
-            effect: req.body.effect,
-            resilience: req.body.resilience,
-            number_of_mints: req.body.number_of_mints,
-            durability: req.body.durability
-        });
-        if (result) {
-            const mintMsg = {
-                mint: {
-                    id: `${result.index}`,
-                    owner: result.owner,
-                }
-            };
-
-            const fee = {
-                amount: [{
-                    denom: 'uaura',
-                    amount: '153',
-                }, ],
-                gas: '100000',
-            }
-
-            try {
-                const response = await signingClient.execute(firstAccount.address, contractAddress, mintMsg, fee);
-                await pen.findOneAndUpdate({ index: result.index }, { deploy_status: true }, { upsert: true });
-
-                res.status(200).json({
-                    data: [response],
-                    message: 'Mint Result'
-                });
-            } catch (err) {
-                res.status(500).json({
-                    data: [err.message],
-                    message: 'Error'
-                });
-            }
-        }
+        // const result = await pen.create({
+        //     contract: contractAddress,
+        //     owner: null,
+        //     quality: req.body.quality,
+        //     level: req.body.level,
+        //     effect: req.body.effect,
+        //     resilience: req.body.resilience,
+        //     number_of_mints: req.body.number_of_mints,
+        //     durability: req.body.durability
+        // });
+        // if (result) {
+        //     try {
+        //         res.status(200).json({
+        //             data: [result],
+        //             message: 'Mint Result'
+        //         });
+        //     } catch (err) {
+        //         res.status(500).json({
+        //             data: [err.message],
+        //             message: 'Error'
+        //         });
+        //     }
+        // }
+        res.render('index.html');
     } catch (err) {
         res.status(500).json({
             data: [err.message],
@@ -180,7 +165,7 @@ router.route('/Token/Mint/Owner').post(async(req, res) => {
     }
 })
 
-router.route('/Token/Get/:id').get(async(req, res) => {
+router.route('/Token/Get/:id').get(async (req, res) => {
     /* 	#swagger.tags = ['Token']
     #swagger.description = 'Mint NFT Token' */
 
@@ -195,20 +180,14 @@ router.route('/Token/Get/:id').get(async(req, res) => {
     console.log(client)
     try {
         const result = await client.queryContractSmart(contractAddress, nftInfo);
-        res.status(200).json({
-            data: [result],
-            message: 'Found Result'
-        });
+        res.status(200).json(success(result, 'Found Result'));
     } catch (err) {
         console.log(err)
-        res.status(500).json({
-            data: [err.message],
-            message: 'Error'
-        });
+        res.status(500).json(error(err.message));
     }
 })
 
-router.post('/Token/Transfer', async(req, res, next) => {
+router.post('/Token/Transfer', async (req, res, next) => {
     /* 	#swagger.tags = ['Token']
         #swagger.description = 'Transfer NFT Token' */
 
@@ -238,7 +217,7 @@ router.post('/Token/Transfer', async(req, res, next) => {
         amount: [{
             denom: 'uaura',
             amount: '1000',
-        }, ],
+        },],
         gas: '152375',
     }
 
@@ -256,7 +235,7 @@ router.post('/Token/Transfer', async(req, res, next) => {
     }
 })
 
-router.route('/metadata/:contract/token/:index').get(async(req, res) => {
+router.route('/metadata/:contract/token/:index').get(async (req, res) => {
     /* 	#swagger.tags = ['Token']
     #swagger.description = 'Get Info NFT Token' */
 
@@ -267,16 +246,10 @@ router.route('/metadata/:contract/token/:index').get(async(req, res) => {
         }
 
         const tokenInfo = await pen.findOne(conditions).exec();
-        res.status(200).json({
-            data: [tokenInfo],
-            message: 'Found Result'
-        });
+        res.status(200).json(success(tokenInfo, 'Found Result'));
     } catch (err) {
         console.log(err)
-        res.status(500).json({
-            data: [err.message],
-            message: 'Error'
-        });
+        res.status(500).json(error(err.message));
     }
 })
 
@@ -284,7 +257,7 @@ router.route('/metadata/:contract/token/:index').get(async(req, res) => {
  * Get list token by owner
  */
 
-router.route('/token/:owner').get(async(req, res) => {
+router.route('/token/:owner').get(async (req, res) => {
     /* 	#swagger.tags = ['Token']
      #swagger.description = 'Get Info NFT Token' */
     const conditions = {
@@ -301,16 +274,10 @@ router.route('/token/:owner').get(async(req, res) => {
 
     try {
         const tokenInfo = await pen.paginate(conditions, options);
-        res.status(200).json({
-            data: [tokenInfo],
-            message: 'Found Result'
-        });
+        res.status(200).json(success(tokenInfo, 'Found Result'));
     } catch (err) {
         console.log(err)
-        res.status(500).json({
-            data: [err.message],
-            message: 'Error'
-        });
+        res.status(500).json(error(err.message));
     }
 
 })
@@ -319,7 +286,7 @@ router.route('/token/:owner').get(async(req, res) => {
  * Get list token by owner
  */
 
-router.route('/earn/token/quiz').post(async(req, res) => {
+router.route('/earn/token/quiz').post(async (req, res) => {
     /* 	#swagger.tags = ['Token']
      #swagger.description = 'Send token to users when they do quiz' */
 
@@ -331,16 +298,10 @@ router.route('/earn/token/quiz').post(async(req, res) => {
 
         const result = await sendTokensQuiz(receivedAddress, point, pen_index, total_time_of_course);
 
-        res.status(200).json({
-            data: [result],
-            message: 'Successful'
-        });
+        res.status(200).json(success(result));
     } catch (err) {
         console.log(err)
-        res.status(500).json({
-            data: [err.message],
-            message: 'Error'
-        });
+        res.status(500).json(error(err.message));
     }
 
 })
