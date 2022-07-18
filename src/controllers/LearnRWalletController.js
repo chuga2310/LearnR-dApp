@@ -48,7 +48,7 @@ const sendTokensQuiz = async(receivedAddress, point, pen_index, total_time_of_co
 
         let decreaseTotalTime = total_time_of_course * decreaseTotalTimePercent;
 
-        let sumTokens = ratio * cal_earning_quiz_mocde(point, pen.level, decreaseTotalTime);
+        let sumTokens = ratio * cal_earning_quiz_mode(point, pen.level, decreaseTotalTime);
 
         let client = await getSigningAuraWasmClient();
         const amount = [
