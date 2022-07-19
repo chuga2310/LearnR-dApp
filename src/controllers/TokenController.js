@@ -95,7 +95,7 @@ privateRouter.route('/Token/Mint').post(async (req, res) => {
                     denom: 'uaura',
                     amount: '153',
                 },],
-                gas: '100000',
+                gas: '200000',
             }
 
             try {
@@ -121,7 +121,7 @@ privateRouter.route('/Token/Mint').post(async (req, res) => {
     }
 })
 
-privateRouter.route('/Token/Mint/Owner').post(async (req, res) => {
+publicRouter.route('/Token/Mint/Owner').get(async (req, res) => {
     /* 	#swagger.tags = ['Token']
     #swagger.description = 'Mint NFT Token' */
 
@@ -144,24 +144,14 @@ privateRouter.route('/Token/Mint/Owner').post(async (req, res) => {
         //     durability: req.body.durability
         // });
         // if (result) {
-        //     try {
-        //         res.status(200).json({
-        //             data: [result],
-        //             message: 'Mint Result'
-        //         });
-        //     } catch (err) {
-        //         res.status(500).json({
-        //             data: [err.message],
-        //             message: 'Error'
-        //         });
-        //     }
+            try {
+                res.render('offline_signer.pug', {pen_index : 33, signingClient : SigningCosmWasmClient});
+            } catch (err) {
+                res.status(500).json(error(er.message));
+            }
         // }
-        res.render('index.html');
     } catch (err) {
-        res.status(500).json({
-            data: [err.message],
-            message: 'Error'
-        });
+        res.status(500).json(error(er.message));
     }
 })
 

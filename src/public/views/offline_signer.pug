@@ -5,6 +5,8 @@ html
         meta(name='viewport' content='width=device-width, initial-scale=1.0')
         meta(http-equiv='X-UA-Compatible' content='ie=edge')
         title= title
-        script(src='SigningCosmWasmClient-bundle.js')
+        script(src='/SigningCosmWasmClient-bundle.js')
     body
-        //- script(src='excute-contract.js')
+        script.
+            var pen_index = #{pen_index}
+        script(src='/excute-contract.js')
