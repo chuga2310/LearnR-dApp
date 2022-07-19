@@ -93,7 +93,7 @@ privateRouter.route('/Token/Mint').post(async (req, res) => {
             const fee = {
                 amount: [{
                     denom: 'uaura',
-                    amount: '153',
+                    amount: '200',
                 },],
                 gas: '200000',
             }
@@ -289,9 +289,9 @@ privateRouter.route('/earn/token/quiz').post(async (req, res) => {
         let pen_index = req.body.pen_index;
         let total_time_of_course = req.body.total_time_of_course;
 
-        const result = await sendTokensQuiz(receivedAddress, point, pen_index, total_time_of_course);
+        sendTokensQuiz(receivedAddress, point, pen_index, total_time_of_course);
 
-        res.status(200).json(success(result));
+        res.status(200).json(success([]));
     } catch (err) {
         console.log(err)
         res.status(500).json(error(err.message));
