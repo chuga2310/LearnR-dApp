@@ -6,6 +6,7 @@ import { makeGatewayURL } from '../helpers/helpers.js';
 import pen from '../models/Pen.js';
 import { getWallet, get1stAccount, getAuraWasmClient, getSigningAuraWasmClient, contractAddress, sendTokensQuiz } from './LearnRWalletController.js';
 import { success, error } from './BaseApi';
+import {createQueue} from 'kue';
 
 const web3Token = process.env.WEB3_STORAGE_TOKEN;
 const storage = new Web3Storage({ token: web3Token });
@@ -289,9 +290,9 @@ privateRouter.route('/earn/token/quiz').post(async (req, res) => {
         let pen_index = req.body.pen_index;
         let total_time_of_course = req.body.total_time_of_course;
 
-        sendTokensQuiz(receivedAddress, point, pen_index, total_time_of_course);
+        const result = await sendTokensQuiz(receivedAddress, point, pen_index, total_time_of_course);
 
-        res.status(200).json(success([]));
+        res.status(200).json(success(result));
     } catch (err) {
         console.log(err)
         res.status(500).json(error(err.message));
