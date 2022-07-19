@@ -6,7 +6,7 @@ import { makeGatewayURL } from '../helpers/helpers.js';
 import pen from '../models/Pen.js';
 import { getWallet, get1stAccount, getAuraWasmClient, getSigningAuraWasmClient, contractAddress, sendTokensQuiz } from './LearnRWalletController.js';
 import { success, error } from './BaseApi';
-import {createQueue} from 'kue';
+// import {createQueue} from 'kue';
 
 const web3Token = process.env.WEB3_STORAGE_TOKEN;
 const storage = new Web3Storage({ token: web3Token });
