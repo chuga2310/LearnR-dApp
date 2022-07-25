@@ -14,7 +14,7 @@ module.exports = {
         topLevelAwait: true
     },
     externals: fs.readdirSync("node_modules")
-        .reduce(function(acc, mod) {
+        .reduce(function (acc, mod) {
             if (mod === ".bin") {
                 return acc
             }
@@ -37,4 +37,5 @@ module.exports = {
             "os": require.resolve("os-browserify/browser")
         }
     }
+
 }

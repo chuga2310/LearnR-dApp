@@ -87,7 +87,14 @@ privateRouter.route('/Token/Mint').post(async (req, res) => {
             const mintMsg = {
                 mint: {
                     id: `${result.index}`,
-                    owner: result.owner,
+                    contract: contractAddress,
+                    owner: firstAccount.address,
+                    quality: req.body.quality,
+                    level: req.body.level,
+                    effect: req.body.effect,
+                    resilience: req.body.resilience,
+                    number_of_mints: req.body.number_of_mints,
+                    durability: req.body.durability
                 }
             };
 
@@ -145,11 +152,11 @@ publicRouter.route('/Token/Mint/Owner').get(async (req, res) => {
         //     durability: req.body.durability
         // });
         // if (result) {
-            try {
-                res.render('offline_signer.pug', {pen_index : 33, signingClient : SigningCosmWasmClient});
-            } catch (err) {
-                res.status(500).json(error(er.message));
-            }
+        try {
+            res.render('offline_signer.pug', { pen_index: 33, signingClient: SigningCosmWasmClient });
+        } catch (err) {
+            res.status(500).json(error(er.message));
+        }
         // }
     } catch (err) {
         res.status(500).json(error(er.message));
@@ -300,4 +307,4 @@ privateRouter.route('/earn/token/quiz').post(async (req, res) => {
 
 })
 
-export { privateRouter, publicRouter};
+export { privateRouter, publicRouter };

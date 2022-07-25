@@ -1,66 +1,66 @@
 {
-    "name": "example-aura-dapp",
-    "version": "1.0.0",
-    "description": "Example showing the dapp of aura network.",
-    "main": "app.js",
-    "readmeFilename": "README.md",
-    "private": false,
-    "keywords": [
-        "aura network",
-        "example",
-        "blockchain"
-    ],
-    "author": {
-        "name": "ThienLK",
-        "email": "thienlk0901@gmail.com"
-    },
-    "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/aura-nw/dapp-example.git"
-    },
-    "scripts": {
-        "start": "node app.js",
-        "start-gendoc": "node swagger.js",
-        "build": "webpack --config webpack.config.js",
-        "watch": "webpack --watch",
-        "serve": "webpack serve --config webpack.config.js --progress"
-    },
-    "dependencies": {
-        "@auranw/aurajs": "^1.0.0-alpha1",
-        "@babel/preset-env": "^7.18.6",
-        "@babel/preset-es2015": "^7.0.0-beta.53",
-        "@cosmjs/cosmwasm-stargate": "^0.28.4",
-        "@cosmjs/proto-signing": "^0.28.4",
-        "babel-loader": "^8.2.5",
-        "babel-preset-es2015": "^6.24.1",
-        "body-parser": "^1.19.1",
-        "browserify": "^17.0.0",
-        "crypto-browserify": "^3.12.0",
-        "dotenv": "^14.2.0",
-        "express": "^4.17.1",
-        "express-fileupload": "^1.2.1",
-        "fs": "^0.0.1-security",
-        "kue": "^0.11.6",
-        "mongodb": "^4.7.0",
-        "mongoose": "^6.4.1",
-        "mongoose-paginate-v2": "^1.7.0",
-        "mongoose-sequence": "^5.3.1",
-        "open": "https://github.com/sindresorhus/open",
-        "path": "^0.12.7",
-        "pug": "^3.0.2",
-        "swagger-autogen": "^2.18.8",
-        "swagger-ui-express": "^4.1.4",
-        "ts-loader": "^9.3.1",
-        "tslib": "^2.3.1",
-        "web3.storage": "^3.5.3"
-    },
-    "devDependencies": {
-        "@keplr-wallet/types": "^0.10.12",
-        "nodemon": "^2.0.18",
-        "webpack": "^5.73.0",
-        "webpack-cli": "^4.10.0",
-        "webpack-dev-server": "^3.11.0",
-        "webpack-node-externals": "^3.0.0"
-    }
+  "name": "example-aura-dapp",
+  "version": "1.0.0",
+  "description": "Example showing the dapp of aura network.",
+  "main": "app.js",
+  "readmeFilename": "README.md",
+  "private": false,
+  "keywords": [
+    "aura network",
+    "example",
+    "blockchain"
+  ],
+  "author": {
+    "name": "ThienLK",
+    "email": "thienlk0901@gmail.com"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aura-nw/dapp-example.git"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "start-gendoc": "node swagger.js",
+    "build": "webpack --config webpack.config.js",
+    "watch": "webpack --watch",
+    "serve": "webpack serve --config webpack.config.js --progress"
+  },
+  "dependencies": {
+    "@auranw/aurajs": "^1.0.0-alpha1",
+    "@babel/preset-env": "^7.18.6",
+    "@babel/preset-es2015": "^7.0.0-beta.53",
+    "@cosmjs/cosmwasm-stargate": "^0.28.4",
+    "@cosmjs/proto-signing": "^0.28.4",
+    "babel-loader": "^8.2.5",
+    "babel-preset-es2015": "^6.24.1",
+    "body-parser": "^1.19.1",
+    "browserify": "^17.0.0",
+    "crypto-browserify": "^3.12.0",
+    "dotenv": "^14.2.0",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.2.1",
+    "fs": "^0.0.1-security",
+    "kue": "^0.11.6",
+    "mongodb": "^4.7.0",
+    "mongoose": "^6.4.1",
+    "mongoose-paginate-v2": "^1.7.0",
+    "mongoose-sequence": "^5.3.1",
+    "open": "https://github.com/sindresorhus/open",
+    "path": "^0.12.7",
+    "pug": "^3.0.2",
+    "swagger-autogen": "^2.18.8",
+    "swagger-ui-express": "^4.1.4",
+    "ts-loader": "^9.3.1",
+    "tslib": "^2.3.1",
+    "web3.storage": "^3.5.3"
+  },
+  "devDependencies": {
+    "@keplr-wallet/types": "^0.10.12",
+    "nodemon": "^2.0.18",
+    "webpack": "^5.73.0",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^3.11.0",
+    "webpack-node-externals": "^3.0.0"
+  }
 }
