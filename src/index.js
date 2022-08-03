@@ -23,7 +23,7 @@ const app = express();
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, "/public/views")); // use pug templates file in /public/views subdirectory
 
-import clientWeb from './controllers/ClientController.js'
+import { privateRouter, publicRouter } from './controllers/ClientController.js'
 import bodyParser from 'body-parser';
 app.use(bodyParser.json());
 /* Routes */
@@ -31,8 +31,6 @@ import router from './routes.js';
 
 app.use(express.static(path.join(__dirname, 'public/views/js')))
 app.use(express.static('@cosmjs/launchpad'));
-
-app.use(clientWeb)
 
 app.use(router);
 
