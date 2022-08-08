@@ -268,7 +268,7 @@ publicRouter.route('/token/:owner').get(async(req, res) => {
 
     var options = {
         page: req.query.page || 1,
-        limit: 1,
+        limit: 10,
         sort: {
             index: -1
         },
