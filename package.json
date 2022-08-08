@@ -22,7 +22,7 @@
     "scripts": {
         "start": "node app.js",
         "start-gendoc": "node swagger.js",
-        "build": "webpack --config webpack.config.js --watch",
+        "build": "webpack --config webpack.config.js",
         "watch": "webpack --watch",
         "serve": "webpack serve --config webpack.config.js --progress"
     },
