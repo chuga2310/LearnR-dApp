@@ -262,26 +262,14 @@ publicRouter.route('/metadata/:contract/token/:index').get(async(req, res) => {
 publicRouter.route('/token/:owner').get(async(req, res) => {
     /* 	#swagger.tags = ['Token']
      #swagger.description = 'Get Info NFT Token' */
-    const conditions = {
-        owner: String(req.params.owner),
-    }
-
-    var options = {
-        page: req.query.page || 1,
-        limit: 10,
-        sort: {
-            index: -1
-        },
-    };
 
     try {
-        const tokenInfo = await pen.paginate(conditions, options);
+        const tokenInfo = await pen.find({ owner: req.params.owner })
         res.status(200).json(success(tokenInfo, 'Found Result'));
     } catch (err) {
         console.log(err)
         res.status(500).json(error(err.message));
     }
-
 })
 
 /**
