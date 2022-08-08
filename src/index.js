@@ -14,16 +14,18 @@ import 'dotenv/config';
 // import { readFile } from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
+var cors = require('cors');
+
 const __filename = fileURLToPath(
     import.meta.url);
 // 👇️ "/home/john/Desktop/javascript"
 const __dirname = path.dirname(__filename);
 import express from 'express';
 const app = express();
+app.use(cors());
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, "/public/views")); // use pug templates file in /public/views subdirectory
 
-import { privateRouter, publicRouter } from './controllers/ClientController.js'
 import bodyParser from 'body-parser';
 app.use(bodyParser.json());
 /* Routes */

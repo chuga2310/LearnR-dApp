@@ -308,4 +308,51 @@ privateRouter.route('/earn/token/quiz').post(async(req, res) => {
 
 })
 
+function randomIntFromInterval(min, max) { // min and max included 
+    return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
+publicRouter.route('/token/create').post(async(req, res) => {
+    /* 	#swagger.tags = ['Token']
+    #swagger.description = 'Mint NFT Token' */
+
+    /*  #swagger.parameters['obj'] = {
+            in: 'body',
+            description: 'Token Information',
+            schema: { $ref: '#/definitions/Mint' }
+    } */
+
+    try {
+        const result = await pen.create({
+            contract: contractAddress,
+            owner: req.body.owner,
+            quality: randomIntFromInterval(1, 5),
+            level: randomIntFromInterval(1, 5),
+            effect: randomIntFromInterval(1, 5),
+            resilience: randomIntFromInterval(1, 5),
+            number_of_mints: 1,
+            durability: randomIntFromInterval(1, 5)
+        });
+        if (result) {
+            try {
+                res.status(200).json({
+                    data: result,
+                    message: 'Create succeed'
+                });
+            } catch (err) {
+                console.log(err)
+                res.status(500).json({
+                    data: [err.message],
+                    message: 'Error'
+                });
+            }
+        }
+    } catch (err) {
+        res.status(500).json({
+            data: [err.message],
+            message: 'Error'
+        });
+    }
+})
+
 export { privateRouter, publicRouter };
